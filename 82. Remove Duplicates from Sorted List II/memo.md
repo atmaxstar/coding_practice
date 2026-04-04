@@ -1,0 +1,8 @@
+step1:
+まず順番にノードを探索していって、head.valがhead.next.valと一致していればそれは重複したノードなのでそれらが消えるまでheadを進めていく。もしhead.valがhead.next.valでなければそれはdistinctなので答えで返すnodeとして追加するという方針で行く。しかし返すべき値をresとしてどのようにres自身に代入するか迷ったので、get_distinct_listという帰納関数を作りボトムアップでdistinctな連結リストを得て返すという方法を取った。
+
+step2:
+get_distinct_listがやっていることとdeleteDuplicatesがやってることが同じだと気づいたのでdeleteDuplicates内でのget_distinct_listの宣言をやめてdeleteDuplicatesの帰納的呼び出しを行うことにした。
+
+step3:
+duplicateだった場合に最後head = head.nextとやってるがそのままhead.nextを代入すればいいと気づいたのでhead = head.nextを消した。
