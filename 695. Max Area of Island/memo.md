@@ -121,3 +121,33 @@ https://github.com/Manato110/LeetCode-arai60/pull/18/changes
 if not (0 <= row < num_rows and 0 <= col < num_cols):
 ```
 この条件式の書き方は参考にできる。0, 1は条件文でWATER, LANDとなっているが、この方はクラス内で改めてWATER = 0, LAND = 1と書いて条件式でself.WATERと書いているので非常に可読性が良い。visited判定もset()に訪れた座標を入れていて、setは確か内部的にハッシュテーブルを利用しているはずなのでO(1)でアクセスできる。よって自分の書いたvisited配列と同じメモリ計算量、時間計算量で利用できる。
+
+## iterative dfsで解いてみた
+```python
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        max_area = 0
+        m, n = len(grid), len(grid[0])
+
+        def get_area_starting_from(i, j):
+            stack = []
+            area = 0
+            stack.append((i, j))
+            while stack:
+                y, x = stack.pop()
+                if not (0 <= y < m and 0 <= x < n and grid[y][x]):
+                    continue
+                grid[y][x] = 0
+                area += 1
+                for col, row in [(y-1, x), (y+1, x), (y, x-1), (y, x+1)]:
+                    stack.append((col, row))
+            return area
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    max_area = max(max_area, get_area_starting_from(i, j))
+        
+        return max_area
+```
+
