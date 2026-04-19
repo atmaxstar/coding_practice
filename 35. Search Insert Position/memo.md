@@ -81,36 +81,15 @@ left, rightに対してleftを閉区間、rightを開区間とすると初期地
 
 ### code
 ```python
-from collections import deque
 class Solution:
-    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-        q = deque()
-        q.append([beginWord, 1])
-        visited = set()
-        visited.add(beginWord)
-        wordSet = set(wordList)
-
-        while q:
-            currentWord, distance = q.popleft()
-            for i in range(len(currentWord)):
-                for c in "abcdefghijklmnopqrstuvwxyz":
-                    nextWord = currentWord[:i] + c + currentWord[i+1:]
-                    if nextWord not in visited and nextWord in wordSet:
-                        visited.add(nextWord)
-                        if nextWord == endWord:
-                            return distance + 1
-                        q.append([nextWord, distance + 1])
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums)
+        while left < right:
+            mid = (left + right) // 2
+            if nums[mid] < target:
+                left = mid + 1
+            else:
+                right = mid
         
-        return 0
+        return left
 ```
-
-## 他の方のコードを読んだ所感
-https://github.com/hemispherium/LeetCode_Arai60/pull/19/changes/efa4e350aa9dd9220904e7b708ad2fac2c560209
-step1にてqueueから出したwordをtempと名づけていてぱっと見これが何を意味しているのかわかりづらくなる原因となると思ったのでcurrentWordとかにした方が良いと感じた。この方は最初にendWordがwordListに存在するか判定しているが、私の方では確認していないのでif文の中にif文を書くネスト構造となってしまった。wordSetから訪問済みの値を消すことでvisitedと同等の働きをしているが、個人的には可読性が低くなってしまうのではと感じた。
-
-https://github.com/Manato110/LeetCode-arai60/pull/19/changes
-この方の最初に書いたコードはそれぞれのwordの差分を
-```python
-diff_count = sum(1 for a, b in zip(target_word, word) if a != b)
-```
-このように表現していてぱっと見わかりづらい。無理に1行にせずにfor文から始めた方が可読性が良いと思う。あとqueueとあるのにset()を使用している点がある。この最初のコードがacceptされない理由としてはendWordがwordListにない場合と、endWordに辿り着かない場合が考慮されていないからである。
